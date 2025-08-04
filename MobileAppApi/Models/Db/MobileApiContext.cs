@@ -15,6 +15,8 @@ public partial class MobileApiContext : DbContext
     {
     }
 
+    public virtual DbSet<Account> Accounts { get; set; }
+
     public virtual DbSet<Client> Clients { get; set; }
 
     public virtual DbSet<CreditApplicationFieldSubmission> CreditApplicationFieldSubmissions { get; set; }
@@ -29,6 +31,31 @@ public partial class MobileApiContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Account>(entity =>
+        {
+            entity.HasKey(e => e.Id).IsClustered(false);
+
+            entity.ToTable("Account");
+
+            entity.HasIndex(e => e.AccountNumber, "CIX_Account_AccountNumber")
+                .IsUnique()
+                .IsClustered();
+
+            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.AccountNumber)
+                .HasMaxLength(10)
+                .IsUnicode(false);
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())");
+            entity.Property(e => e.CurrentDecision)
+                .HasMaxLength(2)
+                .IsUnicode(false);
+            entity.Property(e => e.ModifiedAt).HasDefaultValueSql("(getutcdate())");
+            entity.Property(e => e.Status)
+                .HasMaxLength(25)
+                .IsUnicode(false)
+                .HasDefaultValue("registered");
+        });
+
         modelBuilder.Entity<Client>(entity =>
         {
             entity.HasKey(e => e.Id).IsClustered(false);

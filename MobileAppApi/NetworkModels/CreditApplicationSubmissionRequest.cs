@@ -4,6 +4,6 @@
     {
         public Guid SubmissionId { get; set; }
 
-        public List<SubmissionField> Fields { get; set; } = [];
+        public List<SimpleField> Fields { get; set; } = [];
     }
 }
