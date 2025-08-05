@@ -1,6 +1,6 @@
-﻿namespace MobileAppApi.NetworkModels
+﻿namespace MobileAppApi.Models.Network
 {
-    public class RateCalculationResponse
+    public record RateCalculationResponse
     {
         public decimal AmountFinanced { get; set; }
 

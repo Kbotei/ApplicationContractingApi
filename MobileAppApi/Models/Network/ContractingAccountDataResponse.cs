@@ -1,8 +1,6 @@
-﻿using MobileAppApi.Models;
-
-namespace MobileAppApi.NetworkModels
+﻿namespace MobileAppApi.Models.Network
 {
-    public class ContractingAccountDataResponse
+    public record ContractingAccountDataResponse
     {
         public bool DocumentsInFlight { get; set; } = false;
 

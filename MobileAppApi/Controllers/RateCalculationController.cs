@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MobileAppApi.NetworkModels;
+using MobileAppApi.Models.Network;
 
 namespace MobileAppApi.Controllers
 {

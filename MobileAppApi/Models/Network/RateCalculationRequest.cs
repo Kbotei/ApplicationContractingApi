@@ -1,6 +1,6 @@
-﻿namespace MobileAppApi.NetworkModels
+﻿namespace MobileAppApi.Models.Network
 {
-    public class RateCalculationRequest
+    public record RateCalculationRequest
     {
         public required Guid RequestId { get; set; }
 

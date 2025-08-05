@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MobileAppApi.Models.Db;
+using MobileAppApi.Stores;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 var mobileApiConnectionString = builder.Configuration.GetConnectionString("LocalMobileApiDatabaseConnection") ?? throw new InvalidOperationException("Connection string 'LocalMobileApiDatabaseConnection' not found.");
 builder.Services.AddDbContext<MobileApiContext>(options => options.UseSqlServer(mobileApiConnectionString));
+
+builder.Services.AddScoped<AccountStore>();
 
 builder.Services.AddControllers();
 // TODO: disable swagger in production

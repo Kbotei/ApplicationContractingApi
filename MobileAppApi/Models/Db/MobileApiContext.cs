@@ -21,6 +21,10 @@ public partial class MobileApiContext : DbContext
 
     public virtual DbSet<Client> Clients { get; set; }
 
+    public virtual DbSet<ContractingFieldSubmission> ContractingFieldSubmissions { get; set; }
+
+    public virtual DbSet<ContractingSubmission> ContractingSubmissions { get; set; }
+
     public virtual DbSet<CreditApplicationFieldSubmission> CreditApplicationFieldSubmissions { get; set; }
 
     public virtual DbSet<CreditApplicationSubmission> CreditApplicationSubmissions { get; set; }
@@ -95,6 +99,42 @@ public partial class MobileApiContext : DbContext
                 .IsUnicode(false);
         });
 
+        modelBuilder.Entity<ContractingFieldSubmission>(entity =>
+        {
+            entity.ToTable("ContractingFieldSubmission");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.FieldName)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.FieldNamespace).HasMaxLength(50);
+            entity.Property(e => e.FieldValue)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.Contracting).WithMany(p => p.ContractingFieldSubmissions)
+                .HasForeignKey(d => d.ContractingId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ContractingFieldSubmission_ContractingSubmission");
+        });
+
+        modelBuilder.Entity<ContractingSubmission>(entity =>
+        {
+            entity.ToTable("ContractingSubmission");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+
+            entity.HasOne(d => d.Client).WithMany(p => p.ContractingSubmissions)
+                .HasForeignKey(d => d.ClientId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ContractingSubmission_Client");
+
+            entity.HasOne(d => d.Device).WithMany(p => p.ContractingSubmissions)
+                .HasForeignKey(d => d.DeviceId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ContractingSubmission_Device");
+        });
+
         modelBuilder.Entity<CreditApplicationFieldSubmission>(entity =>
         {
             entity.ToTable("CreditApplicationFieldSubmission");
@@ -104,10 +144,13 @@ public partial class MobileApiContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.FieldNamespace).HasMaxLength(50);
-            entity.Property(e => e.FieldType)
+            entity.Property(e => e.FieldValue)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            entity.Property(e => e.FieldValue)
+            entity.Property(e => e.LabelText)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.SelectedItemText)
                 .HasMaxLength(50)
                 .IsUnicode(false);
 

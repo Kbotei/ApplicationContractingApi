@@ -2,14 +2,18 @@
 using Microsoft.EntityFrameworkCore;
 using MobileAppApi.Models;
 using MobileAppApi.Models.Db;
-using MobileAppApi.NetworkModels;
+using MobileAppApi.Models.Network;
+using MobileAppApi.Stores;
 
 namespace MobileAppApi.Controllers
 {
-    public class ContractingController(ILogger<ContractingController> logger, MobileApiContext mobileApiContext) : ControllerBase
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ContractingController(ILogger<ContractingController> logger, MobileApiContext mobileApiContext, AccountStore accountStore) : ControllerBase
     {
         private readonly ILogger<ContractingController> _logger = logger;
         private readonly MobileApiContext _mobileApiContext = mobileApiContext;
+        private readonly AccountStore _accountStore = accountStore;
 
         [HttpGet(Name = "account-data/{accountNumber}")]
         public async Task<ActionResult> Get(string accountNumber)
@@ -45,12 +49,12 @@ namespace MobileAppApi.Controllers
         }
 
         [HttpPost(Name = "create-contract")]
-        public async Task<ActionResult> Post()
+        public async Task<ActionResult> Post(ContractingSubmissionRequest request)
         {
-            // TODO: insert fields into db.
-            // TODO: Do we want separate field tables or a column for application/contracting? Depends on if SQL is the source of truth.
+            var success = await _accountStore.SaveContractingData(request);
+
             // After saving to database we would want to kick off a command to an endpoint via something like NServiceBus.
-            return Ok();
+            return success ? Ok() : BadRequest();
         }
     }
 }

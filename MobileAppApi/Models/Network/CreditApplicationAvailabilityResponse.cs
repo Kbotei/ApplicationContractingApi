@@ -1,6 +1,6 @@
-﻿namespace MobileAppApi.NetworkModels
+﻿namespace MobileAppApi.Models.Network
 {
-    public class CreditApplicationAvailabilityResponse
+    public record CreditApplicationAvailabilityResponse
     {
         public bool Available { get; set; }
 

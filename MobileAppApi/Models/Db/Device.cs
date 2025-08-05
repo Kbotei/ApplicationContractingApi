@@ -15,5 +15,7 @@ public partial class Device
 
     public DateTime CreatedAt { get; set; }
 
+    public virtual ICollection<ContractingSubmission> ContractingSubmissions { get; set; } = new List<ContractingSubmission>();
+
     public virtual ICollection<CreditApplicationSubmission> CreditApplicationSubmissions { get; set; } = new List<CreditApplicationSubmission>();
 }

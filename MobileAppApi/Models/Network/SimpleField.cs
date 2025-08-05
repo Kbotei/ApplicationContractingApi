@@ -1,6 +1,6 @@
-﻿namespace MobileAppApi.NetworkModels
+﻿namespace MobileAppApi.Models.Network
 {
-    public class SimpleField
+    public record SimpleField
     {
         public required string FieldNamespace { get; set; }
 

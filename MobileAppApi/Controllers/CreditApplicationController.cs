@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Mvc;
 using MobileAppApi.Models.Db;
-using MobileAppApi.NetworkModels;
+using MobileAppApi.Models.Network;
 
 namespace MobileAppApi.Controllers
 {
