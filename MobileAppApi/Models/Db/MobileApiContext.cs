@@ -17,6 +17,8 @@ public partial class MobileApiContext : DbContext
 
     public virtual DbSet<Account> Accounts { get; set; }
 
+    public virtual DbSet<AccountField> AccountFields { get; set; }
+
     public virtual DbSet<Client> Clients { get; set; }
 
     public virtual DbSet<CreditApplicationFieldSubmission> CreditApplicationFieldSubmissions { get; set; }
@@ -26,8 +28,7 @@ public partial class MobileApiContext : DbContext
     public virtual DbSet<Device> Devices { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False;Initial Catalog=MobileApi");
+        => optionsBuilder.UseSqlServer("Name=ConnectionStrings:LocalMobileApiDatabaseConnection");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -54,6 +55,27 @@ public partial class MobileApiContext : DbContext
                 .HasMaxLength(25)
                 .IsUnicode(false)
                 .HasDefaultValue("registered");
+        });
+
+        modelBuilder.Entity<AccountField>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__AccountF__3214EC07F8C7D85A");
+
+            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.Name)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Namespace)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Value)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.Account).WithMany(p => p.AccountFields)
+                .HasForeignKey(d => d.AccountId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_AccountFields_Account");
         });
 
         modelBuilder.Entity<Client>(entity =>

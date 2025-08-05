@@ -20,6 +20,8 @@ namespace MobileAppApi.Controllers
                 return BadRequest();
             }
 
+            // TODO: retrieve account data and fields from db or backend service.
+
             var accountResponse = new ContractingAccountDataResponse
             {
                 DocumentsInFlight = true,
@@ -45,6 +47,9 @@ namespace MobileAppApi.Controllers
         [HttpPost(Name = "create-contract")]
         public async Task<ActionResult> Post()
         {
+            // TODO: insert fields into db.
+            // TODO: Do we want separate field tables or a column for application/contracting? Depends on if SQL is the source of truth.
+            // After saving to database we would want to kick off a command to an endpoint via something like NServiceBus.
             return Ok();
         }
     }

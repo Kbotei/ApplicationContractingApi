@@ -16,4 +16,6 @@ public partial class Account
     public DateTime CreatedAt { get; set; }
 
     public DateTime ModifiedAt { get; set; }
+
+    public virtual ICollection<AccountField> AccountFields { get; set; } = new List<AccountField>();
 }

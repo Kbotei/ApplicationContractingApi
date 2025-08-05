@@ -36,11 +36,10 @@ namespace MobileAppApi.Controllers
             {
                 FieldNamespace = f.FieldNamespace,
                 FieldName = f.FieldName,
-                FieldType = f.FieldType,
                 FieldValue = f.FieldValue,
             });
 
-            // TODO: replace parsed ids with lookup, then eventually tap into identity system?.
+            // TODO: replace parsed ids with lookup, then eventually tap into auth system?.
             var newSubmission = new CreditApplicationSubmission
             {
                 SubmissionId = request.SubmissionId,
@@ -49,8 +48,19 @@ namespace MobileAppApi.Controllers
                 CreditApplicationFieldSubmissions = fields,
             };
 
-            _mobileApiContext.CreditApplicationSubmissions.Add(newSubmission);
-            await _mobileApiContext.SaveChangesAsync();
+            using var transaction = _mobileApiContext.Database.BeginTransaction();
+
+            try
+            {
+                _mobileApiContext.CreditApplicationSubmissions.Add(newSubmission);
+                await _mobileApiContext.SaveChangesAsync();
+                transaction.Commit();
+            }
+            catch
+            { 
+                transaction.Rollback();
+                _logger.LogError("Failed to save application submission for {0}", request.SubmissionId);
+            }
 
             return Ok();
         }
