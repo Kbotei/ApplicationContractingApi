@@ -1,15 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MobileAppApi.Models.Db;
 using MobileAppApi.Models.Network;
+using MobileAppApi.Stores;
 
 namespace MobileAppApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CreditApplicationController(ILogger<CreditApplicationController> logger, MobileApiContext mobileApiContext) : ControllerBase
+    public class CreditApplicationController(ILogger<CreditApplicationController> logger, MobileApiContext mobileApiContext, AccountStore accountStore) : ControllerBase
     {
         private readonly ILogger<CreditApplicationController> _logger = logger;
         private readonly MobileApiContext _mobileApiContext = mobileApiContext;
+        private readonly AccountStore _accountStore = accountStore;
 
         [HttpGet(Name = "check-availability")]
         public CreditApplicationAvailabilityResponse CheckAvailability()
@@ -23,44 +25,10 @@ namespace MobileAppApi.Controllers
         [HttpPost(Name = "submit-application")]
         public async Task<ActionResult> Submit(CreditApplicationSubmissionRequest request)
         {
-            // Handle duplicate submissions. A duplicate submission could occur due to network conditions preventing the
-            // API consumer from receiving the APIs response.
-            if (_mobileApiContext.CreditApplicationSubmissions.Any(c => c.SubmissionId == request.SubmissionId))
-            {
-                return Ok();
-            }
+            var success = await _accountStore.SaveCreditApplicationData(request);
 
-            var fields = request.Fields.ConvertAll(f => new CreditApplicationFieldSubmission
-            {
-                FieldNamespace = f.FieldNamespace,
-                FieldName = f.FieldName,
-                FieldValue = f.FieldValue,
-            });
-
-            // TODO: replace parsed ids with lookup, then eventually tap into auth system?.
-            var newSubmission = new CreditApplicationSubmission
-            {
-                SubmissionId = request.SubmissionId,
-                ClientId = Guid.Parse("d33f9df0-e8c1-47bd-bf1a-25713680cce2"),
-                DeviceId = Guid.Parse("aabddf66-7c41-4a6d-94d7-a9861249dcd5"),
-                CreditApplicationFieldSubmissions = fields,
-            };
-
-            using var transaction = _mobileApiContext.Database.BeginTransaction();
-
-            try
-            {
-                _mobileApiContext.CreditApplicationSubmissions.Add(newSubmission);
-                await _mobileApiContext.SaveChangesAsync();
-                transaction.Commit();
-            }
-            catch
-            { 
-                transaction.Rollback();
-                _logger.LogError("Failed to save application submission for {0}", request.SubmissionId);
-            }
-
-            return Ok();
+            // TODO: add success message to response
+            return success ? Ok() : BadRequest();
         }
     }
 }
