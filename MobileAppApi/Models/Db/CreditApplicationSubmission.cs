@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace MobileAppApi.Models.Db;
+﻿namespace MobileAppApi.Models.Db;
 
 public partial class CreditApplicationSubmission
 {

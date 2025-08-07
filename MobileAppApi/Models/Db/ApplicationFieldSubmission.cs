@@ -1,10 +1,13 @@
-﻿namespace MobileAppApi.Models.Db;
+﻿using System;
+using System.Collections.Generic;
 
-public partial class CreditApplicationFieldSubmission
+namespace MobileAppApi.Models.Db;
+
+public partial class ApplicationFieldSubmission
 {
     public Guid Id { get; set; }
 
-    public Guid CreditApplicationId { get; set; }
+    public Guid ApplicationId { get; set; }
 
     public string FieldNamespace { get; set; } = null!;
 
@@ -18,5 +21,5 @@ public partial class CreditApplicationFieldSubmission
 
     public int ViewOrder { get; set; }
 
-    public virtual CreditApplicationSubmission CreditApplication { get; set; } = null!;
+    public virtual ApplicationSubmission Application { get; set; } = null!;
 }

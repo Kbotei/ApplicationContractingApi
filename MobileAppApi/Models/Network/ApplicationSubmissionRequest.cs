@@ -1,6 +1,6 @@
 ﻿namespace MobileAppApi.Models.Network
 {
-    public record CreditApplicationSubmissionRequest
+    public record ApplicationSubmissionRequest
     {
         public Guid SubmissionId { get; set; }
 

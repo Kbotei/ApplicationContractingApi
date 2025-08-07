@@ -19,15 +19,15 @@ public partial class MobileApiContext : DbContext
 
     public virtual DbSet<AccountField> AccountFields { get; set; }
 
+    public virtual DbSet<ApplicationFieldSubmission> ApplicationFieldSubmissions { get; set; }
+
+    public virtual DbSet<ApplicationSubmission> ApplicationSubmissions { get; set; }
+
     public virtual DbSet<Client> Clients { get; set; }
 
     public virtual DbSet<ContractingFieldSubmission> ContractingFieldSubmissions { get; set; }
 
     public virtual DbSet<ContractingSubmission> ContractingSubmissions { get; set; }
-
-    public virtual DbSet<CreditApplicationFieldSubmission> CreditApplicationFieldSubmissions { get; set; }
-
-    public virtual DbSet<CreditApplicationSubmission> CreditApplicationSubmissions { get; set; }
 
     public virtual DbSet<Device> Devices { get; set; }
 
@@ -82,6 +82,49 @@ public partial class MobileApiContext : DbContext
                 .HasConstraintName("FK_AccountFields_Account");
         });
 
+        modelBuilder.Entity<ApplicationFieldSubmission>(entity =>
+        {
+            entity.ToTable("ApplicationFieldSubmission");
+
+            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.FieldName)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.FieldNamespace).HasMaxLength(50);
+            entity.Property(e => e.FieldValue)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.LabelText)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.SelectedItemText)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.Application).WithMany(p => p.ApplicationFieldSubmissions)
+                .HasForeignKey(d => d.ApplicationId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ApplicationFieldSubmission_ApplicationSubmission");
+        });
+
+        modelBuilder.Entity<ApplicationSubmission>(entity =>
+        {
+            entity.ToTable("ApplicationSubmission");
+
+            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.SubmittedAt).HasDefaultValueSql("(getutcdate())");
+
+            entity.HasOne(d => d.Client).WithMany(p => p.ApplicationSubmissions)
+                .HasForeignKey(d => d.ClientId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ApplicationSubmission_Client");
+
+            entity.HasOne(d => d.Device).WithMany(p => p.ApplicationSubmissions)
+                .HasForeignKey(d => d.DeviceId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ApplicationSubmission_Device");
+        });
+
         modelBuilder.Entity<Client>(entity =>
         {
             entity.HasKey(e => e.Id).IsClustered(false);
@@ -133,49 +176,6 @@ public partial class MobileApiContext : DbContext
                 .HasForeignKey(d => d.DeviceId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ContractingSubmission_Device");
-        });
-
-        modelBuilder.Entity<CreditApplicationFieldSubmission>(entity =>
-        {
-            entity.ToTable("CreditApplicationFieldSubmission");
-
-            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
-            entity.Property(e => e.FieldName)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-            entity.Property(e => e.FieldNamespace).HasMaxLength(50);
-            entity.Property(e => e.FieldValue)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-            entity.Property(e => e.LabelText)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-            entity.Property(e => e.SelectedItemText)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-
-            entity.HasOne(d => d.CreditApplication).WithMany(p => p.CreditApplicationFieldSubmissions)
-                .HasForeignKey(d => d.CreditApplicationId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_CreditApplicationFieldSubmission_CreditApplicationSubmission");
-        });
-
-        modelBuilder.Entity<CreditApplicationSubmission>(entity =>
-        {
-            entity.ToTable("CreditApplicationSubmission");
-
-            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
-            entity.Property(e => e.SubmittedAt).HasDefaultValueSql("(getutcdate())");
-
-            entity.HasOne(d => d.Client).WithMany(p => p.CreditApplicationSubmissions)
-                .HasForeignKey(d => d.ClientId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_CreditApplicationSubmission_Client");
-
-            entity.HasOne(d => d.Device).WithMany(p => p.CreditApplicationSubmissions)
-                .HasForeignKey(d => d.DeviceId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_CreditApplicationSubmission_Device");
         });
 
         modelBuilder.Entity<Device>(entity =>
