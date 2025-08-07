@@ -8,6 +8,7 @@ namespace MobileAppApi.Stores
         private readonly ILogger<ApplicationStore> _logger = logger;
         private readonly MobileApiContext _mobileApiContext = mobileApiContext;
 
+        // TODO: Consider a different return type to differentiate success from duplicate submissions.
         public async Task<bool> SaveApplicationData(ApplicationSubmissionRequest request)
         {
             // Handle duplicate submissions. A duplicate submission could occur due to network conditions preventing the
