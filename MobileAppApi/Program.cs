@@ -10,6 +10,7 @@ var mobileApiConnectionString = builder.Configuration.GetConnectionString("Local
 builder.Services.AddDbContext<MobileApiContext>(options => options.UseSqlServer(mobileApiConnectionString));
 
 builder.Services.AddScoped<ApplicationStore>();
+builder.Services.AddScoped<UserStore>();
 
 builder.Services.AddControllers();
 // TODO: disable swagger in production

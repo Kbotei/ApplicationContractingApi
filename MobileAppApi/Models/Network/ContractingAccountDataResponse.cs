@@ -1,11 +1,10 @@
-﻿namespace MobileAppApi.Models.Network
+﻿namespace MobileAppApi.Models.Network;
+
+public record ContractingAccountDataResponse
 {
-    public record ContractingAccountDataResponse
-    {
-        public bool DocumentsInFlight { get; set; } = false;
+    public bool DocumentsInFlight { get; set; } = false;
 
-        public List<Applicant> Applicants { get; set; } = [];
+    public List<Applicant> Applicants { get; set; } = [];
 
-        public List<SimpleField> AccountFields { get; set; } = [];
-    }
+    public List<SimpleField> AccountFields { get; set; } = [];
 }

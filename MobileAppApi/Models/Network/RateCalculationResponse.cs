@@ -1,15 +1,14 @@
-﻿namespace MobileAppApi.Models.Network
+﻿namespace MobileAppApi.Models.Network;
+
+public record RateCalculationResponse
 {
-    public record RateCalculationResponse
-    {
-        public decimal AmountFinanced { get; set; }
+    public decimal AmountFinanced { get; set; }
 
-        public decimal AdditionalFees { get; set; }
+    public decimal AdditionalFees { get; set; }
 
-        public int NumberOfPayments { get; set; }
+    public int NumberOfPayments { get; set; }
 
-        public required string PromotionalOptions { get; set; }
+    public required string PromotionalOptions { get; set; }
 
-        public DateOnly FirstPaymentDate { get; set; }
-    }
+    public DateOnly FirstPaymentDate { get; set; }
 }

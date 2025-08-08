@@ -1,9 +1,8 @@
-﻿namespace MobileAppApi.Models.Network
-{
-    public record ApplicationSubmissionRequest
-    {
-        public Guid SubmissionId { get; set; }
+﻿namespace MobileAppApi.Models.Network;
 
-        public List<OrderedField> Fields { get; set; } = [];
-    }
+public record ApplicationSubmissionRequest
+{
+    public Guid SubmissionId { get; set; }
+
+    public List<OrderedField> Fields { get; set; } = [];
 }

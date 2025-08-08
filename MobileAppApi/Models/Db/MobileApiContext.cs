@@ -31,6 +31,8 @@ public partial class MobileApiContext : DbContext
 
     public virtual DbSet<Device> Devices { get; set; }
 
+    public virtual DbSet<User> Users { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Name=ConnectionStrings:LocalMobileApiDatabaseConnection");
 
@@ -136,6 +138,15 @@ public partial class MobileApiContext : DbContext
                 .IsClustered();
 
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.A2countryCode)
+                .HasMaxLength(2)
+                .IsUnicode(false)
+                .HasDefaultValue("US")
+                .IsFixedLength()
+                .HasColumnName("A2CountryCode");
+            entity.Property(e => e.ClientNumber)
+                .HasMaxLength(10)
+                .IsUnicode(false);
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())");
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
@@ -184,12 +195,48 @@ public partial class MobileApiContext : DbContext
 
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())");
+            entity.Property(e => e.LastActiveAt).HasDefaultValueSql("(getutcdate())");
             entity.Property(e => e.OperatingSystem)
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.OperatingSystemVersion)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+
+            entity.HasOne(d => d.User).WithMany(p => p.Devices)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Device_User");
+        });
+
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__User__3214EC072B1033F1");
+
+            entity.ToTable("User");
+
+            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())");
+            entity.Property(e => e.Email)
+                .HasMaxLength(255)
+                .IsUnicode(false);
+            entity.Property(e => e.FirstName)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.LastName)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Password)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.PhoneNumber)
+                .HasMaxLength(20)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.Client).WithMany(p => p.Users)
+                .HasForeignKey(d => d.ClientId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_User_Client");
         });
 
         OnModelCreatingPartial(modelBuilder);

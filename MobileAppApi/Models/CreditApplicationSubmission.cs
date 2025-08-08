@@ -1,6 +1,5 @@
-﻿namespace MobileAppApi.Models
+﻿namespace MobileAppApi.Models;
+
+public class CreditApplicationSubmission
 {
-    public class CreditApplicationSubmission
-    {
-    }
 }

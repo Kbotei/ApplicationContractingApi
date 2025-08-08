@@ -1,8 +1,7 @@
-﻿namespace MobileAppApi.Models
+﻿namespace MobileAppApi.Models;
+
+public enum ApplicantType
 {
-    public enum ApplicantType
-    {
-        Primary = 1,
-        Secondary
-    }
+    Primary = 1,
+    Secondary
 }

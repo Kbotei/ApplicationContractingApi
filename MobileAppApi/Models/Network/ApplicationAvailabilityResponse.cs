@@ -1,9 +1,8 @@
-﻿namespace MobileAppApi.Models.Network
-{
-    public record ApplicationAvailabilityResponse
-    {
-        public bool Available { get; set; }
+﻿namespace MobileAppApi.Models.Network;
 
-        public bool StaffAvailable { get; set; }
-    }
+public record ApplicationAvailabilityResponse
+{
+    public bool Available { get; set; }
+
+    public bool StaffAvailable { get; set; }
 }
