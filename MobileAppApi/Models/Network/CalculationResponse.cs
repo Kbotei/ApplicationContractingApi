@@ -1,6 +1,6 @@
 ﻿namespace MobileAppApi.Models.Network;
 
-public record RateCalculationResponse
+public record CalculationResponse
 {
     public decimal AmountFinanced { get; set; }
 
@@ -11,4 +11,6 @@ public record RateCalculationResponse
     public required string PromotionalOptions { get; set; }
 
     public DateOnly FirstPaymentDate { get; set; }
+
+    public DateOnly CancelationDate { get; set; }
 }

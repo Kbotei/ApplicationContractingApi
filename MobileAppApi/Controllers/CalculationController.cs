@@ -1,16 +1,15 @@
-﻿using Azure.Core;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MobileAppApi.Models.Network;
 
 namespace MobileAppApi.Controllers;
 [Route("api/[controller]")]
 [ApiController]
-public class RateCalculationController(ILogger<RateCalculationController> logger) : ControllerBase
+public class CalculationController(ILogger<CalculationController> logger) : ControllerBase
 {
-    private readonly ILogger<RateCalculationController> _logger = logger;
+    private readonly ILogger<CalculationController> _logger = logger;
 
     [HttpPost(Name = "calculate")]
-    public RateCalculationResponse Calculate(RateCalculationRequest request) 
+    public CalculationResponse Calculate(CalculationRequest request) 
     {
         ArgumentNullException.ThrowIfNull(request);
 
@@ -24,9 +23,10 @@ public class RateCalculationController(ILogger<RateCalculationController> logger
         var random = new Random();
         var additionalFees = new decimal(random.NextDouble() * 100);
 
-        return new RateCalculationResponse {
+        return new CalculationResponse {
             AdditionalFees = additionalFees,
             AmountFinanced = request.AmountToBeFinanced + additionalFees,
+            CancelationDate = DateOnly.FromDateTime(DateTime.Now.AddDays(5)),
             FirstPaymentDate = request.FirstPaymentDate,
             NumberOfPayments = request.NumberOfPayments,
             PromotionalOptions = request.PromotionalOptions,
