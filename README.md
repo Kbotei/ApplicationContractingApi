@@ -1,4 +1,4 @@
-Exercise to create a .net core API indented to be used by specific mobile app. 
+Exercise to create a .net core API indented to be used by a companies mobile app. 
  
 The mobile app will need support for various features including:
 * Process/forward requests for various financial calculations to specialized backend services.
