@@ -5,3 +5,8 @@ The mobile app will need support for various features including:
 * The ability to submit applications, potentially based on the above calculations.
 * The ability to submit finalized data for the contracting process.
     * After submission send command or trigger an event on a message bus to complete the next step of the contracting process (e.g. creating the contract pdf and coordinating with some third party document signing service).
+
+**TODO**
+* Ensure proper validation
+* Add error responses if applicable
+* Add auth (.net core identity)
