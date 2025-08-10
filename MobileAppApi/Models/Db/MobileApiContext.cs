@@ -34,7 +34,7 @@ public partial class MobileApiContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Name=ConnectionStrings:LocalMobileApiDatabaseConnection");
+        => optionsBuilder.UseSqlServer("Name=ConnectionStrings:LocalDatabaseConnection");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
