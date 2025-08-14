@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-var mobileApiConnectionString = builder.Configuration.GetConnectionString("LocalMobileApiDatabaseConnection") ?? throw new InvalidOperationException("Connection string 'LocalMobileApiDatabaseConnection' not found.");
+var mobileApiConnectionString = builder.Configuration.GetConnectionString("LocalDatabaseConnection") ?? throw new InvalidOperationException("Connection string 'LocalMobileApiDatabaseConnection' not found.");
 builder.Services.AddDbContext<MobileApiContext>(options => options.UseSqlServer(mobileApiConnectionString));
 
 builder.Services.AddScoped<ApplicationStore>();
