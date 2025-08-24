@@ -1,13 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+﻿using ApplicationContractingApi.Models.Network;
+using ApplicationContractingApi.Stores;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
-using MobileAppApi.Models.Db;
-using MobileAppApi.Models.Network;
-using MobileAppApi.Stores;
 using Moq;
 using Moq.EntityFrameworkCore;
 
-namespace MobileAppApi.Tests.Stores;
+namespace ApplicationContractingApi.Tests.Stores;
 [TestClass()]
 public class ApplicationTests
 {

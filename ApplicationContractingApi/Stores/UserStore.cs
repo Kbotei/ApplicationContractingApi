@@ -1,16 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MobileAppApi.Models.Db;
-using MobileAppApi.Models.Network;
+﻿using ApplicationContractingApi.Models.Db;
+using ApplicationContractingApi.Models.Network;
+using Microsoft.EntityFrameworkCore;
 
-namespace MobileAppApi.Stores;
-public class UserStore(ILogger<UserStore> logger, MobileApiContext mobileApiContext)
+namespace ApplicationContractingApi.Stores;
+public class UserStore(ILogger<UserStore> logger, ApplicationContractingApiContext apiContext)
 {
     private readonly ILogger<UserStore> _logger = logger;
-    private readonly MobileApiContext _mobileApiContext = mobileApiContext;
+    private readonly ApplicationContractingApiContext _apiContext = apiContext;
 
     public async Task<string?> ClientCountryCode(string clientNumber)
     {
-        return await _mobileApiContext.Clients
+        return await _apiContext.Clients
                     .Where(c => c.ClientNumber == clientNumber)
                     .Select(c => c.A2countryCode)
                     .FirstOrDefaultAsync();
@@ -19,7 +19,7 @@ public class UserStore(ILogger<UserStore> logger, MobileApiContext mobileApiCont
     // TODO: create response type to convey various success and failure options.
     public async Task<bool> RegisterDevice(RegistrationRequest request)
     {
-        var user = await _mobileApiContext.Users
+        var user = await _apiContext.Users
             .FirstOrDefaultAsync(u => u.Email == request.Email) ?? 
             new User { 
                 Email = request.Email,
@@ -38,11 +38,11 @@ public class UserStore(ILogger<UserStore> logger, MobileApiContext mobileApiCont
 
         user.Devices.Add(newDevice);
 
-        using var transaction = _mobileApiContext.Database.BeginTransaction();
+        using var transaction = _apiContext.Database.BeginTransaction();
 
         try
         {
-            _mobileApiContext.SaveChanges();
+            _apiContext.SaveChanges();
             transaction.Commit();
             return true;
         }

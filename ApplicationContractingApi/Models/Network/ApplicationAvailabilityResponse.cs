@@ -1,4 +1,4 @@
-﻿namespace MobileAppApi.Models.Network;
+﻿namespace ApplicationContractingApi.Models.Network;
 
 public record ApplicationAvailabilityResponse
 {

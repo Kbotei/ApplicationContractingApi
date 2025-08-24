@@ -1,15 +1,15 @@
-﻿using MobileAppApi.Models.Db;
-using MobileAppApi.Models.Network;
+﻿using ApplicationContractingApi.Models.Db;
+using ApplicationContractingApi.Models.Network;
 
-namespace MobileAppApi.Stores;
-public class ContractingStore(ILogger<ContractingStore> logger, MobileApiContext mobileApiContext)
+namespace ApplicationContractingApi.Stores;
+public class ContractingStore(ILogger<ContractingStore> logger, ApplicationContractingApiContext apiContext)
 {
     private readonly ILogger<ContractingStore> _logger = logger;
-    private readonly MobileApiContext _mobileApiContext = mobileApiContext;
+    private readonly ApplicationContractingApiContext _apiContext = apiContext;
 
     public async Task<bool> SaveContractingData(ContractingSubmissionRequest request)
     {
-        if (_mobileApiContext.ContractingSubmissions.Any(c => c.SubmissionId == request.SubmissionId))
+        if (_apiContext.ContractingSubmissions.Any(c => c.SubmissionId == request.SubmissionId))
         {
             return true;
         }
@@ -29,12 +29,12 @@ public class ContractingStore(ILogger<ContractingStore> logger, MobileApiContext
             ContractingFieldSubmissions = fields
         };
 
-        using var transaction = _mobileApiContext.Database.BeginTransaction();
+        using var transaction = _apiContext.Database.BeginTransaction();
 
         try
         {
-            _mobileApiContext.ContractingSubmissions.Add(contractingSubmission);
-            await _mobileApiContext.SaveChangesAsync();
+            _apiContext.ContractingSubmissions.Add(contractingSubmission);
+            await _apiContext.SaveChangesAsync();
             transaction.Commit();
             return true;
         }

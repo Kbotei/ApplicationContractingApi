@@ -1,4 +1,4 @@
-﻿namespace MobileAppApi;
+﻿namespace ApplicationContractingApi;
 
 public class AppConstants
 {

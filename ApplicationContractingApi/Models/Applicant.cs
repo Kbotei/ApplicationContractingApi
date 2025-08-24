@@ -1,4 +1,4 @@
-﻿namespace MobileAppApi.Models;
+﻿namespace ApplicationContractingApi.Models;
 
 public class Applicant
 {

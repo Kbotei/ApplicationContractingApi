@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using MobileAppApi.Models.Network;
-using MobileAppApi.Stores;
+﻿using ApplicationContractingApi.Models.Network;
+using ApplicationContractingApi.Stores;
+using Microsoft.AspNetCore.Mvc;
 
-namespace MobileAppApi.Controllers;
+namespace ApplicationContractingApi.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 public class ApplicationController(ILogger<ApplicationController> logger, ApplicationStore applicationStore) : ControllerBase

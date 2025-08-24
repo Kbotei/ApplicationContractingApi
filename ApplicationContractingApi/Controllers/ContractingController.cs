@@ -1,17 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ApplicationContractingApi.Models;
+using ApplicationContractingApi.Models.Db;
+using ApplicationContractingApi.Models.Network;
+using ApplicationContractingApi.Stores;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MobileAppApi.Models;
-using MobileAppApi.Models.Db;
-using MobileAppApi.Models.Network;
-using MobileAppApi.Stores;
 
-namespace MobileAppApi.Controllers;
+namespace ApplicationContractingApi.Controllers;
 [Route("api/[controller]")]
 [ApiController]
-public class ContractingController(ILogger<ContractingController> logger, MobileApiContext mobileApiContext, ContractingStore contractingStore) : ControllerBase
+public class ContractingController(ILogger<ContractingController> logger, ApplicationContractingApiContext apiContext, ContractingStore contractingStore) : ControllerBase
 {
     private readonly ILogger<ContractingController> _logger = logger;
-    private readonly MobileApiContext _mobileApiContext = mobileApiContext;
+    private readonly ApplicationContractingApiContext _apiContext = apiContext;
     private readonly ContractingStore _contractingStore = contractingStore;
 
     [HttpGet(Name = "account-data/{submissionId}")]
@@ -19,7 +19,7 @@ public class ContractingController(ILogger<ContractingController> logger, Mobile
     {
         ArgumentNullException.ThrowIfNull(submissionId);
 
-        var account = await _mobileApiContext.ApplicationSubmissions.FirstOrDefaultAsync(a => a.SubmissionId == submissionId);
+        var account = await _apiContext.ApplicationSubmissions.FirstOrDefaultAsync(a => a.SubmissionId == submissionId);
         if (account == null)
         {
             return BadRequest();

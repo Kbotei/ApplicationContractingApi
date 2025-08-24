@@ -1,15 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using MobileAppApi.Models.Db;
-using MobileAppApi.Models.Network;
-using MobileAppApi.Stores;
+﻿using ApplicationContractingApi.Models.Network;
+using ApplicationContractingApi.Stores;
+using Microsoft.AspNetCore.Mvc;
 
-namespace MobileAppApi.Controllers;
+namespace ApplicationContractingApi.Controllers;
 [Route("api/[controller]")]
 [ApiController]
-public class RegistrationController(ILogger<RegistrationController> logger, MobileApiContext mobileApiContext, UserStore userStore) : ControllerBase
+public class RegistrationController(ILogger<RegistrationController> logger, UserStore userStore) : ControllerBase
 {
     private readonly ILogger<RegistrationController> _logger = logger;
-    private readonly MobileApiContext _mobileApiContext = mobileApiContext;
     private readonly UserStore _userStore = userStore;
 
     [HttpGet(Name = "preflight/{clientNumber}")]

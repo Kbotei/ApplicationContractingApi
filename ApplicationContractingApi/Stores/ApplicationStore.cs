@@ -1,18 +1,18 @@
-﻿using MobileAppApi.Models.Db;
-using MobileAppApi.Models.Network;
+﻿using ApplicationContractingApi.Models.Db;
+using ApplicationContractingApi.Models.Network;
 
-namespace MobileAppApi.Stores;
-public class ApplicationStore(ILogger<ApplicationStore> logger, MobileApiContext mobileApiContext)
+namespace ApplicationContractingApi.Stores;
+public class ApplicationStore(ILogger<ApplicationStore> logger, ApplicationContractingApiContext apiContext)
 {
     private readonly ILogger<ApplicationStore> _logger = logger;
-    private readonly MobileApiContext _mobileApiContext = mobileApiContext;
+    private readonly ApplicationContractingApiContext _apiContext = apiContext;
 
     // TODO: Consider a different return type to differentiate success from duplicate submissions.
     public async Task<bool> SaveApplicationData(ApplicationSubmissionRequest request)
     {
         // Handle duplicate submissions. A duplicate submission could occur due to network conditions preventing the
         // API consumer from receiving the APIs response.
-        if (_mobileApiContext.ApplicationSubmissions.Any(c => c.SubmissionId == request.SubmissionId))
+        if (_apiContext.ApplicationSubmissions.Any(c => c.SubmissionId == request.SubmissionId))
         {
             return true;
         }
@@ -29,18 +29,18 @@ public class ApplicationStore(ILogger<ApplicationStore> logger, MobileApiContext
         var newSubmission = new ApplicationSubmission
         {
             SubmissionId = request.SubmissionId,
-            ClientId = AppConstants.ClientId,
-            DeviceId = AppConstants.DeviceId,
+            ApplicationType = "Scholarship", // TODO: replace with static string enum or create application type table
+            UserId = AppConstants.ClientId,
             ApplicationFieldSubmissions = fields,
         };
 
-        _mobileApiContext.ApplicationSubmissions.Add(newSubmission);
+        _apiContext.ApplicationSubmissions.Add(newSubmission);
 
-        using var transaction = _mobileApiContext.Database.BeginTransaction();
+        using var transaction = _apiContext.Database.BeginTransaction();
 
         try
         {
-            await _mobileApiContext.SaveChangesAsync();
+            await _apiContext.SaveChangesAsync();
             transaction.Commit();
             return true;
         }
