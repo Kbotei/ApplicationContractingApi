@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace MobileAppApi.Models.Db;
+﻿namespace ApplicationContractingApi.Models.Db;
 
 public partial class User
 {
@@ -20,6 +17,8 @@ public partial class User
     public string PhoneNumber { get; set; } = null!;
 
     public DateTime CreatedAt { get; set; }
+
+    public virtual ICollection<ApplicationSubmission> ApplicationSubmissions { get; set; } = new List<ApplicationSubmission>();
 
     public virtual Client Client { get; set; } = null!;
 

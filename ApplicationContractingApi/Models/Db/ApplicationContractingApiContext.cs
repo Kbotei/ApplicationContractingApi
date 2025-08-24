@@ -1,19 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace MobileAppApi.Models.Db;
+namespace ApplicationContractingApi.Models.Db;
 
-public partial class MobileApiContext : DbContext
+public partial class ApplicationContractingApiContext : DbContext
 {
-    public MobileApiContext()
+    public ApplicationContractingApiContext()
     {
     }
 
-    public MobileApiContext(DbContextOptions<MobileApiContext> options)
+    public ApplicationContractingApiContext(DbContextOptions<ApplicationContractingApiContext> options)
         : base(options)
     {
     }
 
     public virtual DbSet<ApplicationFieldSubmission> ApplicationFieldSubmissions { get; set; }
+
+    public virtual DbSet<ApplicationMobileSubmission> ApplicationMobileSubmissions { get; set; }
 
     public virtual DbSet<ApplicationSubmission> ApplicationSubmissions { get; set; }
 
@@ -57,22 +59,37 @@ public partial class MobileApiContext : DbContext
                 .HasConstraintName("FK_ApplicationFieldSubmission_ApplicationSubmission");
         });
 
+        modelBuilder.Entity<ApplicationMobileSubmission>(entity =>
+        {
+            entity.ToTable("ApplicationMobileSubmission");
+
+            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
+            entity.HasOne(d => d.ApplicationSubmission).WithMany(p => p.ApplicationMobileSubmissions)
+                .HasForeignKey(d => d.ApplicationSubmissionId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ApplicationMobileSubmission_ApplicationSubmission");
+
+            entity.HasOne(d => d.Device).WithMany(p => p.ApplicationMobileSubmissions)
+                .HasForeignKey(d => d.DeviceId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ApplicationMobileSubmission_Device");
+        });
+
         modelBuilder.Entity<ApplicationSubmission>(entity =>
         {
             entity.ToTable("ApplicationSubmission");
 
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.ApplicationType)
+                .HasMaxLength(20)
+                .IsUnicode(false);
             entity.Property(e => e.SubmittedAt).HasDefaultValueSql("(getutcdate())");
 
-            entity.HasOne(d => d.Client).WithMany(p => p.ApplicationSubmissions)
-                .HasForeignKey(d => d.ClientId)
+            entity.HasOne(d => d.User).WithMany(p => p.ApplicationSubmissions)
+                .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ApplicationSubmission_Client");
-
-            entity.HasOne(d => d.Device).WithMany(p => p.ApplicationSubmissions)
-                .HasForeignKey(d => d.DeviceId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ApplicationSubmission_Device");
+                .HasConstraintName("FK_ApplicationSubmission_User");
         });
 
         modelBuilder.Entity<Client>(entity =>

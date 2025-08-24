@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace MobileAppApi.Models.Db;
+﻿namespace ApplicationContractingApi.Models.Db;
 
 public partial class ApplicationSubmission
 {
@@ -9,15 +6,15 @@ public partial class ApplicationSubmission
 
     public Guid SubmissionId { get; set; }
 
-    public Guid ClientId { get; set; }
+    public string ApplicationType { get; set; } = null!;
 
-    public Guid DeviceId { get; set; }
+    public Guid UserId { get; set; }
 
     public DateTime SubmittedAt { get; set; }
 
     public virtual ICollection<ApplicationFieldSubmission> ApplicationFieldSubmissions { get; set; } = new List<ApplicationFieldSubmission>();
 
-    public virtual Client Client { get; set; } = null!;
+    public virtual ICollection<ApplicationMobileSubmission> ApplicationMobileSubmissions { get; set; } = new List<ApplicationMobileSubmission>();
 
-    public virtual Device Device { get; set; } = null!;
+    public virtual User User { get; set; } = null!;
 }

@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MobileAppApi.Models;
 using MobileAppApi.Models.Db;
@@ -15,12 +14,12 @@ public class ContractingController(ILogger<ContractingController> logger, Mobile
     private readonly MobileApiContext _mobileApiContext = mobileApiContext;
     private readonly ContractingStore _contractingStore = contractingStore;
 
-    [HttpGet(Name = "account-data/{accountNumber}")]
-    public async Task<ActionResult> Get(string accountNumber)
+    [HttpGet(Name = "account-data/{submissionId}")]
+    public async Task<ActionResult> Get(Guid submissionId)
     {
-        ArgumentNullException.ThrowIfNull(accountNumber);
+        ArgumentNullException.ThrowIfNull(submissionId);
 
-        var account = await _mobileApiContext.Accounts.FirstOrDefaultAsync(a => a.AccountNumber == accountNumber);
+        var account = await _mobileApiContext.ApplicationSubmissions.FirstOrDefaultAsync(a => a.SubmissionId == submissionId);
         if (account == null)
         {
             return BadRequest();

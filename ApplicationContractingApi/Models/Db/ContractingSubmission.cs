@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace MobileAppApi.Models.Db;
+﻿namespace ApplicationContractingApi.Models.Db;
 
 public partial class ContractingSubmission
 {

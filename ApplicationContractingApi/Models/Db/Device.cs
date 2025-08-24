@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace MobileAppApi.Models.Db;
+﻿namespace ApplicationContractingApi.Models.Db;
 
 public partial class Device
 {
@@ -17,7 +14,7 @@ public partial class Device
 
     public DateTime CreatedAt { get; set; }
 
-    public virtual ICollection<ApplicationSubmission> ApplicationSubmissions { get; set; } = new List<ApplicationSubmission>();
+    public virtual ICollection<ApplicationMobileSubmission> ApplicationMobileSubmissions { get; set; } = new List<ApplicationMobileSubmission>();
 
     public virtual ICollection<ContractingSubmission> ContractingSubmissions { get; set; } = new List<ContractingSubmission>();
 
